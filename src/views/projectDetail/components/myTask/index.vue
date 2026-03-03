@@ -19,7 +19,7 @@
             <template #state="{ row }">
               <span
                 :style="{
-                  color: row.state === '进行中' ? '#1890ff' : '#52c41a',
+                  color: row.state === '进行中' ? '#1890ff' : row.state === '生成失败' ? '#ff4d4f' : '#52c41a',
                   fontWeight: 'bold',
                 }">
                 {{ row.state }}
@@ -63,6 +63,7 @@ watch(visible, (val) => {
   }
 });
 function onChange() {
+  pageValue.value.page = 1;
   getTaskList();
 }
 interface taskData {

@@ -99,6 +99,7 @@ function handleCancel() {
 function handleOk() {
   axios
     .post("/project/addProject", {
+      projectType: formState.value.projectType ? formState.value.projectType : "基于小说原文",
       name: formState.value.name ? formState.value.name : "名称",
       intro: formState.value.intro ? formState.value.intro : "这个是一条小说简介",
       type: formState.value.type ? formState.value.type : "玄幻",
