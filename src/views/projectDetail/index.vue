@@ -30,7 +30,7 @@
         </div>
         <div class="ac" style="margin-left: 20px; cursor: pointer" @click="taskFn">
           <t-icon name="tips-double-filled" />
-          <span style="margin-left: 5px;">任务中心</span>
+          <span style="margin-left: 5px">任务中心</span>
         </div>
       </div>
     </div>
@@ -38,11 +38,11 @@
     <div class="main">
       <!-- <overview v-if="currentSubView === 'overview'" /> -->
       <originalNovalText v-if="currentSubView === 'originalNovalText'" />
-      <!-- <outlineManager v-if="currentSubView === 'outline'" />
-      <assetsManager v-if="currentSubView === 'assets'" />
-      <scriptManager v-if="currentSubView === 'script'" /> -->
+      <!-- <outlineManager v-if="currentSubView === 'outline'" /> -->
+      <!-- <assetsManager v-if="currentSubView === 'assets'" /> -->
+      <scriptManager v-if="currentSubView === 'script'" />
     </div>
-    <!-- <myTask v-model="visible" /> -->
+    <myTask v-model="visible" />
   </div>
 </template>
 
@@ -53,8 +53,8 @@ import store from "@/stores";
 import originalNovalText from "./components/originalNovalText/index.vue";
 // import outlineManager from "./components/outlineManager/index.vue";
 // import assetsManager from "./components/assetsManager/index.vue";
-// import scriptManager from "./components/scriptManager/index.vue";
-// import myTask from "./components/myTask/index.vue";
+import scriptManager from "./components/scriptManager/index.vue";
+import myTask from "./components/myTask/index.vue";
 
 const { project } = storeToRefs(store());
 
