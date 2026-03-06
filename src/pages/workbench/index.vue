@@ -13,9 +13,9 @@
           :showArrow="false"
           v-for="(menu, index) in menuList"
           :key="index">
-          <div class="item c" v-if="menu.type === 'btn'" :class="{ active: activeMenu == menu.path }" @click="handleClick(menu.path)">
+          <div class="item fc c" v-if="menu.type === 'btn'" :class="{ active: activeMenu == menu.path }" @click="handleClick(menu.path!)">
             <component :is="menu.icon" class="icon" />
-            <span v-show="!collapsed">{{ menu.label }}</span>
+            <span v-if="menu.showTitle" class="title">{{ menu.label }}</span>
           </div>
           <div class="divider" v-if="menu.type === 'divider'"></div>
         </t-tooltip>
@@ -31,7 +31,6 @@
           :key="index">
           <div class="item c" :class="{ active: activeMenu == menu.path }" @click="handleClick(menu.path)">
             <component :is="menu.icon" class="icon" />
-            <span v-show="!collapsed">{{ menu.label }}</span>
           </div>
         </t-tooltip>
       </div>
@@ -47,13 +46,13 @@ const menuList = [
   { type: "btn", path: "/project", label: "我的项目", icon: "i-folder-close" },
   { type: "btn", path: "/taskList", label: "任务中心", icon: "i-view-list" },
   { type: "divider" },
-  { type: "btn", path: "/setting", label: "项目总览", icon: "i-more-app" },
-  { type: "btn", path: "/setting", label: "小说原文", icon: "i-notebook" },
-  { type: "btn", path: "/setting", label: "剧本Agent", icon: "i-color-filter" },
-  { type: "btn", path: "/setting", label: "剧本管理", icon: "i-document-folder" },
-  { type: "btn", path: "/setting", label: "视频生产", icon: "i-carousel-video" },
+  { type: "btn", path: "/setting", label: "项目总览", icon: "i-more-app", showTitle: true },
+  { type: "btn", path: "/setting", label: "小说原文", icon: "i-notebook", showTitle: true },
+  { type: "btn", path: "/setting", label: "剧本AI", icon: "i-color-filter", showTitle: true },
+  { type: "btn", path: "/setting", label: "剧本管理", icon: "i-document-folder", showTitle: true },
+  { type: "btn", path: "/setting", label: "视频生产", icon: "i-carousel-video", showTitle: true },
   { type: "divider" },
-  { type: "btn", path: "/setting", label: "资产中心", icon: "i-receive" },
+  { type: "btn", path: "/setting", label: "资产中心", icon: "i-receive", showTitle: true },
 ];
 
 const footMenuList = [{ type: "btn", path: "/setting", label: "设置", icon: "i-setting" }];
@@ -61,7 +60,6 @@ const footMenuList = [{ type: "btn", path: "/setting", label: "设置", icon: "i
 const router = useRouter();
 const route = useRoute();
 const activeMenu = ref(route.path);
-const collapsed = ref(true);
 
 function handleClick(value: string | number) {
   const path = String(value);
@@ -109,6 +107,11 @@ function handleClick(value: string | number) {
         height: 50px;
         .icon {
           font-size: 24px;
+        }
+        .title{
+          font-size: 12px;
+          opacity: 0.8;
+          white-space: nowrap;
         }
         &:hover {
           background-color: #ecedef;
@@ -159,6 +162,8 @@ function handleClick(value: string | number) {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 </style>
