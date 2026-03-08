@@ -81,12 +81,12 @@
 
             <!-- 失败状态 -->
             <template v-else>
-              <a-tooltip :title="result.errorReason || '生成失败'">
+              <t-tooltip :content="result.errorReason || '生成失败'">
                 <div class="status-cover failed">
                   <i-close-one theme="filled" :size="24" fill="#ef4444" />
                   <span>生成失败</span>
                 </div>
-              </a-tooltip>
+              </t-tooltip>
             </template>
           </div>
         </div>
@@ -103,17 +103,17 @@
     </div>
 
     <!-- 视频播放弹窗 -->
-    <a-modal v-model:open="videoPlayerVisible" :title="null" :footer="null" width="800px" centered destroyOnClose wrapClassName="video-player-modal">
+    <t-dialog v-model:visible="videoPlayerVisible" header="" :footer="false" width="800px" destroyOnClose>
       <div class="video-player-content">
         <video v-if="currentPlayVideo" ref="videoRef" :src="currentPlayVideo.filePath" controls autoplay class="video-element" />
       </div>
-    </a-modal>
+    </t-dialog>
   </t-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import { message } from "ant-design-vue";
+import { MessagePlugin } from "tdesign-vue-next";
 import videoStore, { type VideoResult } from "@/stores/video";
 import { storeToRefs } from "pinia";
 import axios from "@/utils/axios";
@@ -138,6 +138,8 @@ const editableConfig = ref<VideoConfigData | null>(null);
 // 当前配置
 const config = computed(() => {
   if (!props.configId) return null;
+  console.log("%c Line:141 🍡 props.configId", "background:#e41a6a", props.configId);
+  console.log("%c Line:144 🥕 videoConfigs.value", "background:#465975", videoConfigs.value);
 
   return videoConfigs.value.find((c) => c.id === props.configId) || null;
 });
@@ -157,6 +159,7 @@ watch(
   config,
   (newConfig) => {
     if (newConfig) {
+      console.log("%c Line:162 🍧 newConfig", "background:#f5ce50", newConfig);
       editableConfig.value = {
         id: newConfig.id,
         manufacturer: newConfig.manufacturer,
@@ -171,6 +174,8 @@ watch(
         prompt: newConfig.prompt,
         audioEnabled: newConfig.audioEnabled,
       };
+        console.log("%c Line:164 🍇 editableConfig.value", "background:#93c0a4", editableConfig.value);
+
     } else {
       editableConfig.value = null;
     }
@@ -227,9 +232,9 @@ async function handleGenerate() {
   isGenerating.value = true;
   try {
     await store.generateVideo(props.configId);
-    message.success("视频生成任务已提交");
+    MessagePlugin.success("视频生成任务已提交");
   } catch (error: any) {
-    message.error(error?.message || "生成失败");
+    MessagePlugin.error(error?.message || "生成失败");
   } finally {
     isGenerating.value = false;
   }
@@ -248,9 +253,9 @@ async function handleSelectResult(result: VideoResult) {
       id: props.configId,
       selectedResultId: result.id,
     });
-    message.success("已选择此视频");
+    MessagePlugin.success("已选择此视频");
   } catch (error: any) {
-    message.error("选择失败");
+    MessagePlugin.error("选择失败");
     console.error("更新选中结果失败:", error);
   }
 }
@@ -340,7 +345,7 @@ onMounted(() => {
       gap: 16px;
 
       .result-card {
-        background: var(--bg-primary);
+        background: var(--td-brand-color-3);
         border-radius: 12px;
         overflow: hidden;
         border: 2px solid transparent;

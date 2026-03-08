@@ -2,7 +2,7 @@
   <t-dialog
     v-model:visible="visible"
     :header="title"
-    @ok="confirmSelection"
+    @confirm="confirmSelection"
     @cancel="handleCancel"
     top="1vh"
     width="80%"

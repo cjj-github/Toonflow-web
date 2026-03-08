@@ -61,7 +61,7 @@
 import type { ScrollbarInstance } from "element-plus";
 import throttle from "@/utils/throttle";
 import chatMessage from "./chatMessage.vue";
-import { message as antMessage } from "ant-design-vue";
+import { MessagePlugin } from "tdesign-vue-next";
 import "./type.d.ts";
 const msgInput = ref<HTMLTextAreaElement | null>(null);
 const message = defineModel<ChatMessage[]>({ default: [] });
@@ -96,7 +96,7 @@ function handleEnter(event: KeyboardEvent) {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
     if (!props.canSend) {
-      antMessage.warning({ content: "请等待消息响应完成", duration: 1 });
+      MessagePlugin.warning("请等待消息响应完成");
       return;
     }
     throttleSendMsg();
@@ -154,7 +154,7 @@ const throttleSendMsg = throttle(sendMsg, 1000);
 
 async function sendMsg() {
   if (!inputMsg.value.trim()) {
-    antMessage.warning({ content: "请输入内容", duration: 1 });
+    MessagePlugin.warning("请输入内容");
     return;
   }
   const msg = inputMsg.value;

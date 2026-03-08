@@ -694,23 +694,24 @@ function getManufacturerSupportedDurations(
 // 根据 modelList 动态生成厂商的最大图片数
 function getManufacturerMaxImages(manufacturer: string, model?: string): number {
   let manufacturerModels = modelList.filter((m) => m.manufacturer === manufacturer);
-
-  // 如果指定了 model，只使用该模型的配置
-  if (model) {
-    manufacturerModels = manufacturerModels.filter((m) => m.model === model);
-  }
-
-  let maxImages = 1;
-
-  manufacturerModels.forEach((model) => {
-    if (model.type.includes("multiImage")) {
-      maxImages = Math.max(maxImages, 9);
-    } else if (model.type.includes("startEndRequired") || model.type.includes("endFrameOptional")) {
-      maxImages = Math.max(maxImages, 2);
+  if (manufacturer !== "other") {
+    // 如果指定了 model，只使用该模型的配置
+    if (model) {
+      manufacturerModels = manufacturerModels.filter((m) => m.model === model);
     }
-  });
 
-  return maxImages;
+    let maxImages = 1;
+    manufacturerModels.forEach((model) => {
+      if (model.type.includes("multiImage")) {
+        maxImages = Math.max(maxImages, 9);
+      } else if (model.type.includes("startEndRequired") || model.type.includes("endFrameOptional")) {
+        maxImages = Math.max(maxImages, 2);
+      }
+    });
+    return maxImages;
+  } else {
+    return 9;
+  }
 }
 
 // 动态生成厂商配置（基于 modelList）
@@ -897,7 +898,7 @@ export function getDurationOptions(manufacturer: string, model?: string) {
 
 // 获取时长范围（支持模型参数）
 export function getDurationRange(manufacturer: string, model?: string) {
-  return getManufacturerConfig(manufacturer, model).durationRange || { min: 5, max: 20, step: 1 };
+  return getManufacturerConfig(manufacturer, model).durationRange || { min: 1, max: 20, step: 1 };
 }
 
 // 获取时长提示（支持模型参数）

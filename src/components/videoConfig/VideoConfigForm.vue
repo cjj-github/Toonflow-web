@@ -254,6 +254,7 @@ const emit = defineEmits<{
 
 // 本地配置副本
 const localConfig = reactive<VideoConfigData>({ ...props.config });
+
 const promptLoading = ref(false);
 
 // 图片选择器状态
@@ -429,13 +430,13 @@ onMounted(async () => {
     userId: Number(localStorage.getItem("userId")),
   });
   manufacturerList.value = res.data;
+
   if (!localConfig.model) {
     localConfig.aiConfigId = undefined;
     selectManfactDis.value = false;
   } else {
     // 如果已有 model，确保 manufacturer 和其他配置正确
-    const selectedManufacturer = manufacturerList.value.find((i) => i.manufacturer === localConfig.manufacturer);
-
+    const selectedManufacturer = manufacturerList.value.find((i) => i.manufacturer === localConfig.manufacturer && i.model == localConfig.model);
     if (selectedManufacturer) {
       localConfig.aiConfigId = selectedManufacturer.id;
     }

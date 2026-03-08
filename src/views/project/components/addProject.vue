@@ -11,12 +11,12 @@
       cancel-btn="取消">
       <div class="data">
         <t-form :data="formState" label-align="left">
-          <t-form-item label="项目类型">
+          <!-- <t-form-item label="项目类型">
             <t-select v-model="formState.projectType" placeholder="选择项目类型">
               <t-option key="基于小说原文" label="基于小说原文" value="基于小说原文" />
               <t-option key="基于剧本" label="基于剧本" value="基于剧本" />
             </t-select>
-          </t-form-item>
+          </t-form-item> -->
           <t-form-item label="项目名称">
             <t-input v-model="formState.name" />
           </t-form-item>

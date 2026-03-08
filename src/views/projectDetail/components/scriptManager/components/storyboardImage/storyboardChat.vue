@@ -45,7 +45,7 @@ import chat from "@/components/chat/index.vue";
 import draggableCanvas from "./draggableCanvas.vue";
 import { v4 as uuidv4 } from "uuid";
 import WsClient from "@/utils/wsClient";
-import { message as antMessage, message, Modal } from "ant-design-vue";
+import { DialogPlugin, MessagePlugin } from "tdesign-vue-next";
 import detectionImage from "./detectionImage.vue";
 
 type ImageDataItem = {
@@ -237,7 +237,7 @@ function initWsClient() {
       pendingMessage = null;
       if (e.code === 500) {
         pushNoticeMsg(e.reason ?? "WebSocket连接关闭");
-        antMessage.error(e.reason ?? "WebSocket连接关闭");
+        MessagePlugin.error(e.reason ?? "WebSocket连接关闭");
       }
       ws = null;
     },
@@ -383,7 +383,7 @@ function handleWsMessage(msgData: { type: string; data: any }) {
       generatingIds.value = generatingIds.value.filter((id) => !shotIds.includes(id));
       const errorMsg = data.data?.error || "未知错误";
       pushNoticeMsg(`❌ 分镜图生成失败: ${errorMsg}`);
-      antMessage.error(`分镜图生成失败: ${errorMsg}`);
+      MessagePlugin.error(`分镜图生成失败: ${errorMsg}`);
     },
 
     // 错误
@@ -391,7 +391,7 @@ function handleWsMessage(msgData: { type: string; data: any }) {
       endCurrentStream();
       canSend.value = true;
       pushNoticeMsg(`错误: ${data.data}`);
-      antMessage.error(data.data);
+      MessagePlugin.error(data.data);
     },
 
     // 通知
@@ -470,7 +470,7 @@ function pushThinkingMsg() {
 // 发送消息 API
 async function sendApi(message: string) {
   if (!message.trim()) {
-    antMessage.warning("请输入内容");
+    MessagePlugin.warning("请输入内容");
     return;
   }
 
@@ -541,11 +541,12 @@ function cleanHistory() {
 // 关闭弹窗
 function cancelModal() {
   if (flagQuit) {
-    Modal.confirm({
-      title: "确认退出",
-      content: "当前任务未完成，退出内容不会保留，确定退出吗？",
-      onOk() {
+    const dialogInstance = DialogPlugin.confirm({
+      header: "确认退出",
+      body: "当前任务未完成，退出内容不会保留，确定退出吗？",
+      onConfirm: () => {
         closeAndCleanup();
+        dialogInstance.destroy();
       },
     });
   } else {
@@ -708,7 +709,7 @@ function handleGenerateImage(grid: GridItem) {
 async function exportAll() {
   if (!detectionImageRef.value) return;
   if (imageNumber.value == 0) {
-    antMessage.warning("请先生成分镜图片");
+    MessagePlugin.warning("请先生成分镜图片");
     return;
   }
   const allCells = gridData.value
@@ -721,7 +722,7 @@ async function exportAll() {
       };
     })
     .filter(Boolean);
-  if (!allCells.length) return message.warning("请先生成图片");
+  if (!allCells.length) return MessagePlugin.warning("请先生成图片");
   try {
     // 构建带有正确 segmentId 和 shotIndex 的数据
     const imageDataList: any[] = [];
@@ -749,7 +750,7 @@ async function exportAll() {
     detectionImageShow.value = true;
   } catch (e) {
     console.error(e);
-    antMessage.error("生成或保存失败");
+    MessagePlugin.error("生成或保存失败");
   } finally {
   }
 }

@@ -1,15 +1,15 @@
 <template>
   <div class="detection-image">
-    <a-modal v-model:open="detectionImageShow" width="85%" :closable="false" wrapClassName="detection-modal" centered @ok="handleOk">
+    <t-dialog v-model:visible="detectionImageShow" width="85%" :close-btn="false" :footer="false" class="detection-modal" :attach="'body'">
       <!-- 自定义标题 -->
-      <template #title>
+      <template #header>
         <div class="modal-header">
           <div class="header-left">
             <div class="header-icon">
               <i-export theme="filled" size="20" />
             </div>
             <span class="header-title">导出镜头</span>
-            <a-tag color="purple">{{ imageData?.length || 0 }} 个镜头</a-tag>
+            <t-tag theme="primary" variant="light">{{ imageData?.length || 0 }} 个镜头</t-tag>
           </div>
           <button class="close-btn" @click="detectionImageShow = false">
             <i-close theme="outline" size="18" />
@@ -28,14 +28,14 @@
             </span>
           </div>
           <div class="toolbar-right">
-            <a-button @click="handleBatchSuperScore" :disabled="selectedCount === 0">
+            <t-button @click="handleBatchSuperScore" :disabled="selectedCount === 0">
               <template #icon><i-high-light theme="outline" size="16" /></template>
               批量超分图片
-            </a-button>
-            <a-button type="primary" @click="handleBatchGeneratePrompts" :disabled="selectedCount === 0">
+            </t-button>
+            <t-button theme="primary" @click="handleBatchGeneratePrompts" :disabled="selectedCount === 0">
               <template #icon><i-magic-wand theme="outline" size="16" /></template>
               批量生成视频提示词
-            </a-button>
+            </t-button>
           </div>
         </div>
 
@@ -61,18 +61,17 @@
               <template #default="{ row }">
                 <div class="image-cell">
                   <div class="image-wrapper" :class="{ loading: row.superScoreLoading }">
-                    <a-spin :spinning="!!row.superScoreLoading" size="small" tip="超分中...">
-                      <a-image
+                    <t-loading :loading="!!row.superScoreLoading" size="small" text="超分中...">
+                      <t-image
                         :src="row.filePath"
-                        :preview-src="row.filePath"
-                        width="100"
-                        height="60"
-                        style="object-fit: cover; border-radius: 6px" />
-                    </a-spin>
+                        fit="cover"
+                        :style="{ width: '100px', height: '60px', borderRadius: '6px' }"
+                        :overlay-trigger="'hover'" />
+                    </t-loading>
                   </div>
-                  <a-tag :color="row.isSuperScored ? 'success' : 'default'" size="small" class="status-tag">
+                  <t-tag :theme="row.isSuperScored ? 'success' : 'default'" size="small" class="status-tag">
                     {{ row.isSuperScored ? "已超分" : "未超分" }}
-                  </a-tag>
+                  </t-tag>
                 </div>
               </template>
             </vxe-column>
@@ -89,13 +88,13 @@
             <!-- 视频提示词 -->
             <vxe-column field="videoPrompt" title="视频提示词" min-width="240" :edit-render="{ name: 'input' }" show-overflow="">
               <template #default="{ row }">
-                <a-spin :spinning="!!row.videoPromptLoading" size="small" wrapperClassName="video-prompt-spin">
+                <t-loading :loading="!!row.videoPromptLoading" size="small">
                   <div class="prompt-cell video">
                     <span class="prompt-text" :title="row.videoPrompt">
                       {{ row.videoPrompt || "-" }}
                     </span>
                   </div>
-                </a-spin>
+                </t-loading>
               </template>
             </vxe-column>
 
@@ -110,25 +109,23 @@
       </div>
 
       <!-- 底部 -->
-      <template #footer>
-        <div class="modal-footer">
-          <div class="footer-info">
-            <i-info theme="outline" size="14" />
-            <span>点击单元格可编辑提示词内容</span>
-          </div>
-          <div class="footer-actions">
-            <a-button @click="detectionImageShow = false">取消</a-button>
-            <a-button type="primary" @click="handleOk" :loading="loadingBtn">保存并导出</a-button>
-          </div>
+      <div class="modal-footer">
+        <div class="footer-info">
+          <i-info theme="outline" size="14" />
+          <span>点击单元格可编辑提示词内容</span>
         </div>
-      </template>
-    </a-modal>
+        <div class="footer-actions">
+          <t-button @click="detectionImageShow = false">取消</t-button>
+          <t-button theme="primary" @click="handleOk" :loading="loadingBtn">保存并导出</t-button>
+        </div>
+      </div>
+    </t-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, nextTick, computed } from "vue";
-import { message as antMessage } from "ant-design-vue";
+import { MessagePlugin } from "tdesign-vue-next";
 import axios from "@/utils/axios";
 import type { VxeTablePropTypes, VxeTableInstance, VxeTableEvents } from "vxe-table";
 
@@ -175,13 +172,13 @@ const handleEditActived: VxeTableEvents.EditActived<ImageDataItem> = ({ row, col
 
   if (field === "videoPrompt" && row.videoPromptLoading) {
     tableRef.value?.clearEdit();
-    antMessage.warning("正在生成提示词，请稍候");
+    MessagePlugin.warning("正在生成提示词，请稍候");
     return;
   }
 
   if (field === "prompt" && row.superScoreLoading) {
     tableRef.value?.clearEdit();
-    antMessage.warning("正在超分处理，请稍候");
+    MessagePlugin.warning("正在超分处理，请稍候");
   }
 };
 
@@ -255,19 +252,19 @@ function groupBySegmentId(rows: ImageDataItem[]) {
 async function handleBatchSuperScore() {
   const selectedRows = getSelectedRows();
   if (selectedRows.length === 0) {
-    antMessage.warning("请先选择要超分的图片");
+    MessagePlugin.warning("请先选择要超分的图片");
     return;
   }
 
   const rowsToProcess = selectedRows.filter((row) => !row.superScoreLoading);
   if (rowsToProcess.length === 0) {
-    antMessage.warning("所选图片正在处理中");
+    MessagePlugin.warning("所选图片正在处理中");
     return;
   }
 
   const alreadySuperScored = rowsToProcess.filter((row) => row.isSuperScored);
   if (alreadySuperScored.length > 0) {
-    antMessage.info(`其中 ${alreadySuperScored.length} 张已超分，将重新处理`);
+    MessagePlugin.info(`其中 ${alreadySuperScored.length} 张已超分，将重新处理`);
   }
 
   const processingIds = rowsToProcess.map((row) => row.id);
@@ -281,9 +278,9 @@ async function handleBatchSuperScore() {
     };
     const res = await axios.post("/storyboard/batchSuperScoreImage", payload);
     updateRowsByIds(res.data, "isSuperScored");
-    antMessage.success("超分成功");
+    MessagePlugin.success("超分成功");
   } catch {
-    antMessage.error("超分失败");
+    MessagePlugin.error("超分失败");
   } finally {
     setLoadingByIds(processingIds, "superScoreLoading", false);
   }
@@ -292,19 +289,19 @@ async function handleBatchSuperScore() {
 async function handleBatchGeneratePrompts() {
   const selectedRows = getSelectedRows();
   if (selectedRows.length === 0) {
-    antMessage.warning("请先选择要生成提示词的图片");
+    MessagePlugin.warning("请先选择要生成提示词的图片");
     return;
   }
 
   const rowsToProcess = selectedRows.filter((row) => !row.videoPromptLoading);
   if (rowsToProcess.length === 0) {
-    antMessage.warning("所选图片正在处理中");
+    MessagePlugin.warning("所选图片正在处理中");
     return;
   }
 
   const alreadyGenerated = rowsToProcess.filter((row) => row.isVideoPromptGenerated);
   if (alreadyGenerated.length > 0) {
-    antMessage.info(`其中 ${alreadyGenerated.length} 条已生成，将重新处理`);
+    MessagePlugin.info(`其中 ${alreadyGenerated.length} 条已生成，将重新处理`);
   }
 
   const processingIds = rowsToProcess.map((row) => row.id);
@@ -346,11 +343,11 @@ async function handleBatchGeneratePrompts() {
 
   // 显示最终结果消息
   if (failedCount === 0) {
-    antMessage.success(`全部生成成功 (${successCount} 条)`);
+    MessagePlugin.success(`全部生成成功 (${successCount} 条)`);
   } else if (successCount === 0) {
-    antMessage.error(`全部生成失败 (${failedCount} 条)`);
+    MessagePlugin.error(`全部生成失败 (${failedCount} 条)`);
   } else {
-    antMessage.warning(`成功 ${successCount} 条，失败 ${failedCount} 条`);
+    MessagePlugin.warning(`成功 ${successCount} 条，失败 ${failedCount} 条`);
   }
 }
 const loadingBtn = ref(false);
@@ -373,11 +370,11 @@ function handleOk() {
       })),
     })
     .then(() => {
-      antMessage.success("保存成功");
+      MessagePlugin.success("保存成功");
       emit("save");
     })
     .catch(() => {
-      antMessage.error("保存失败");
+      MessagePlugin.error("保存失败");
     })
     .finally(() => {
       detectionImageShow.value = false;
@@ -390,23 +387,13 @@ function handleOk() {
 <style lang="scss" scoped>
 .detection-image {
   :deep(.detection-modal) {
-    .ant-modal-content {
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .ant-modal-header {
+    .t-dialog__header {
       padding: 0;
       border: none;
     }
 
-    .ant-modal-body {
+    .t-dialog__body {
       padding: 0 24px;
-    }
-
-    .ant-modal-footer {
-      border: none;
-      padding: 0 24px 20px;
     }
   }
 }

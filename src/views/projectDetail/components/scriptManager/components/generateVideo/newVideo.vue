@@ -6,7 +6,7 @@
       v-model:visible="storyboardShow"
       header="添加视频配置"
       okText="保存配置"
-      @ok="handleOk"
+      @confirm="handleOk"
       @cancel="handleCancel"
       :confirmLoading="generateVideoLoading">
       <div class="configPanel">
@@ -200,7 +200,7 @@
       top="1vh"
       v-model:visible="imageSelectorVisible"
       :header="imageSelectorTitle"
-      @ok="confirmImageSelection"
+      @confirm="confirmImageSelection"
       @cancel="imageSelectorVisible = false"
       width="80%"
       :bodyStyle="{ maxHeight: '70vh', overflow: 'auto' }">

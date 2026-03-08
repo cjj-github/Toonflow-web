@@ -28,10 +28,10 @@
             <span class="navLabel">{{ item.label }}</span>
           </button>
         </div>
-        <div class="ac" style="margin-left: 20px; cursor: pointer" @click="taskFn">
+        <!-- <div class="ac" style="margin-left: 20px; cursor: pointer" @click="taskFn">
           <t-icon name="tips-double-filled" />
           <span style="margin-left: 5px;">任务中心</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- main -->
@@ -42,7 +42,7 @@
       <assetsManager v-if="currentSubView === 'assets'" />
       <scriptManager v-if="currentSubView === 'script'" />
     </div>
-    <myTask v-model="visible" />
+    <myTask v-model="visible" v-if="visible"/>
   </div>
 </template>
 

@@ -10,6 +10,9 @@
     <skeleton title="登录配置" divider>
       <loginConfig />
     </skeleton>
+    <!-- <skeleton title="官方模型配置" divider>
+      <officialConfig />
+    </skeleton> -->
     <skeleton title="语言模型配置" divider>
       <aiConfog />
     </skeleton>
@@ -46,6 +49,7 @@ import dbConfig from "./components/dbConfig.vue";
 import otherConfig from "./components/otherConfig.vue";
 import about from "./components/about.vue";
 import logoutConfig from "./components/logoutConfig.vue";
+import officialConfig from './components/officialConfig.vue'
 </script>
 
 <style lang="scss" scoped>

@@ -70,9 +70,9 @@
               <div class="thumb-wrapper">
                 <img :src="item.firstFrame" alt="视频封面" class="video-thumb" @error="handleImageError" />
                 <div class="thumb-overlay">
-                  <div class="play-icon">
+                  <!-- <div class="play-icon">
                     <i-play :size="24" />
-                  </div>
+                  </div> -->
                 </div>
               </div>
 
@@ -358,7 +358,7 @@ function handleImageError(e: Event) {
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
-        background: var(--td-success-color-hover);
+        background: var(--td-success-color-4);
         box-shadow: 0 6px 20px var(--td-shadow-2);
       }
 
@@ -412,8 +412,6 @@ function handleImageError(e: Event) {
 
   .action-bar {
     padding: 16px 24px;
-    background: var(--td-bg-color-component);
-    border-bottom: 1px solid var(--td-component-border);
 
     .select-info {
       display: flex;
@@ -685,7 +683,6 @@ function handleImageError(e: Event) {
     gap: 12px;
     padding: 20px 24px;
     border-top: 1px solid var(--td-component-border);
-    background: var(--td-bg-color-component);
 
     .cancel-btn {
       padding: 10px 24px;
@@ -699,7 +696,7 @@ function handleImageError(e: Event) {
       transition: all 0.2s ease;
 
       &:hover {
-        background: var(--td-bg-color-component-hover);
+        background: var(--td-bg-color-container-hover);
         color: var(--td-text-color-primary);
       }
     }
@@ -721,7 +718,7 @@ function handleImageError(e: Event) {
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
-        background: var(--td-success-color-hover);
+        background: var(--td-success-color-4);
         box-shadow: 0 6px 20px var(--td-shadow-2);
       }
 
