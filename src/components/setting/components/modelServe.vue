@@ -4,9 +4,9 @@
       <div class="listContent">
         <div style="max-height: 500px; overflow: auto">
           <t-menu v-model="modelData" theme="light" @change="handleMenuChange">
-            <t-menu-item v-for="item in modelList" :key="item.id" :value="item.id">
+            <t-menu-item v-for="item in modelList" :key="item.name" :value="item.name">
               <template #icon>
-                <t-icon :name="getProviderIcon(item.id)" />
+                <t-icon :name="getProviderIcon(item.name)" />
               </template>
               <div class="menuItemContent">
                 <span class="modelName">{{ item.name }}</span>
@@ -101,7 +101,7 @@ import newAddModel from "./addModel.vue";
 import dayjs from "dayjs";
 
 interface ModelItem {
-  id: string;
+  id: number;
   name: string;
   enabled: boolean;
   apiKey: string;
@@ -112,7 +112,7 @@ interface ModelItem {
 
 const modelList = ref<ModelItem[]>([
   {
-    id: "openai",
+    id: 1,
     name: "OpenAI",
     enabled: true,
     apiKey: "",
@@ -125,7 +125,7 @@ const modelList = ref<ModelItem[]>([
     ],
   },
   {
-    id: "claude",
+    id: 2,
     name: "Claude",
     enabled: true,
     apiKey: "",
@@ -138,7 +138,7 @@ const modelList = ref<ModelItem[]>([
     ],
   },
   {
-    id: "qwen",
+    id: 3,
     name: "通义千问",
     enabled: true,
     apiKey: "",
@@ -151,23 +151,23 @@ const modelList = ref<ModelItem[]>([
     ],
   },
 ]);
-const modelData = ref("openai");
+const modelData = ref("OpenAI");
 
-const currentModel = computed(() => modelList.value.find((item) => item.id === modelData.value));
+const currentModel = computed(() => modelList.value.find((item) => item.name === modelData.value));
 
-function getProviderIcon(id: string): string {
+function getProviderIcon(name: string): string {
   const iconMap: Record<string, string> = {
-    openai: "logo-github",
-    claude: "chat",
-    qwen: "cloud",
-    gemini: "logo-google",
-    deepseek: "search",
-    zhipu: "layers",
-    moonshot: "moon",
-    doubao: "sound",
-    other: "server",
+    "OpenAI": "logo-github",
+    "Claude": "chat",
+    "通义千问": "cloud",
+    "Gemini": "logo-google",
+    "DeepSeek": "search",
+    "Zhipu": "layers",
+    "Moonshot": "moon",
+    "Doubao": "sound",
+    "Other": "server",
   };
-  return iconMap[id] || "server";
+  return iconMap[name] || "server";
 }
 
 // 菜单切换处理
@@ -175,7 +175,10 @@ function handleMenuChange(value: any) {
   modelData.value = value;
 }
 function loadFromLocalStorage() {}
-function addVendor() {}
+const addVendorShow = ref(false);
+function addVendor() {
+  addVendorShow.value = true;
+}
 const addModelShow = ref(false);
 function addModel() {
   formData.value = {
@@ -251,6 +254,7 @@ onMounted(() => {
       margin-left: 30px;
       .configForm {
         .inputWrapper {
+          width: 100%;
           position: relative;
         }
         .formHelp {
