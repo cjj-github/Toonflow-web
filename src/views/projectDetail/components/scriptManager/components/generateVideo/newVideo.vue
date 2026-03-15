@@ -432,7 +432,7 @@ function handleCheckedChange(data: { checked: boolean; row: Storyboard }) {
     } else {
       if (!tempSelectedIds.value.includes(data.row.id)) {
         if (tempSelectedImages.value.length >= maxImages) {
-          message.warning(`最多只能选择${maxImages}张图片`);
+          window.$message.warning(`最多只能选择${maxImages}张图片`);
           return;
         }
         tempSelectedIds.value.push(data.row.id);
@@ -472,7 +472,7 @@ async function generateConfigPrompt(config: VideoConfig) {
     images.push(...config.images);
   }
   if (images.length === 0) {
-    message.warning("请先选择图片");
+    window.$message.warning("请先选择图片");
     return;
   }
   config.promptLoading = true;
@@ -484,34 +484,34 @@ async function generateConfigPrompt(config: VideoConfig) {
       type: config.mode,
     });
     config.prompt = res.data;
-    message.success("提示词生成成功");
+    window.$message.success("提示词生成成功");
   } catch (e: any) {
-    message.error(e?.message || "生成失败");
+    window.$message.error(e?.message || "生成失败");
   } finally {
     config.promptLoading = false;
   }
 }
 async function handleOk() {
   if (videoConfigs.value.length === 0) {
-    message.warning("请至少添加一个视频配置");
+    window.$message.warning("请至少添加一个视频配置");
     return;
   }
   for (let i = 0; i < videoConfigs.value.length; i++) {
     const config = videoConfigs.value[i];
     if (config.mode === "startEnd" && !config.startFrame) {
-      message.warning(`配置${i + 1}：请选择首帧图片`);
+      window.$message.warning(`配置${i + 1}：请选择首帧图片`);
       return;
     }
     if (config.mode === "single" && !config.startFrame) {
-      message.warning(`配置${i + 1}：请选择图片`);
+      window.$message.warning(`配置${i + 1}：请选择图片`);
       return;
     }
     if (config.mode === "multi" && config.images.length === 0) {
-      message.warning(`配置${i + 1}：请选择至少一张图片`);
+      window.$message.warning(`配置${i + 1}：请选择至少一张图片`);
       return;
     }
     if (!config.prompt.trim()) {
-      message.warning(`配置${i + 1}：请输入视频提示词`);
+      window.$message.warning(`配置${i + 1}：请输入视频提示词`);
       return;
     }
   }
@@ -540,10 +540,10 @@ async function handleOk() {
         videoStoreInstance.addConfigFromBackend(res.data.data);
       }
     }
-    message.success(`成功添加${videoConfigs.value.length}个视频配置`);
+    window.$message.success(`成功添加${videoConfigs.value.length}个视频配置`);
     storyboardShow.value = false;
   } catch (error: any) {
-    message.error(error?.message || "添加配置失败");
+    window.$message.error(error?.message || "添加配置失败");
   } finally {
     generateVideoLoading.value = false;
   }

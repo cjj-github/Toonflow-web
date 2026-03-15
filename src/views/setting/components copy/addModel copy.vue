@@ -692,10 +692,10 @@ async function keep() {
         manufacturer: modelForm.value.manufacturer,
         apiKey: modelForm.value.apiKey,
       });
-      message.success("新增成功");
+      window.$message.success("新增成功");
       emit("fetchModelList");
     } catch (e) {
-      message.error("新增失败");
+      window.$message.error("新增失败");
     }
   } else {
     try {
@@ -708,10 +708,10 @@ async function keep() {
         manufacturer: modelForm.value.manufacturer,
         apiKey: modelForm.value.apiKey,
       });
-      message.success("编辑成功");
+      window.$message.success("编辑成功");
       emit("fetchModelList");
     } catch (e) {
-      message.error("编辑失败");
+      window.$message.error("编辑失败");
     }
   }
 

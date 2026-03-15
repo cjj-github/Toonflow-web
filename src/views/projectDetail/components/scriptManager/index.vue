@@ -133,7 +133,7 @@ async function getScriptData() {
     const { data } = await axios.post("/script/geScriptApi", { projectId: projectId.value });
     scripts.value = data;
   } catch {
-    message.error("获取剧本列表失败");
+    window.$message.error("获取剧本列表失败");
   }
 }
 

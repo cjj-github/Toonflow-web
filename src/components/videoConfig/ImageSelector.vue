@@ -28,7 +28,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import { message } from "ant-design-vue";
 import mainElement from "@/views/projectDetail/components/assetsManager/components/mainElement.vue";
 import { getModelList, type ImageItem } from "./manufacturerConfig";
 
@@ -139,7 +138,7 @@ function handleCheckedChange(data: { checked: boolean; row: Storyboard }) {
       // 多选模式
       if (!tempSelectedIds.value.includes(data.row.id)) {
         if (tempSelectedImages.value.length >= maxImages) {
-          message.warning(`最多只能选择${maxImages}张图片`);
+          window.$message.warning(`最多只能选择${maxImages}张图片`);
           return;
         }
         tempSelectedIds.value.push(data.row.id);

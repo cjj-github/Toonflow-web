@@ -202,7 +202,6 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from "vue";
-import { message } from "ant-design-vue";
 import { PlusOutlined, CloseOutlined } from "@ant-design/icons-vue";
 import draggable from "vuedraggable";
 import ImageSelector from "./ImageSelector.vue";
@@ -396,9 +395,9 @@ async function generatePrompt() {
     });
     localConfig.prompt = res.data;
     emitChange();
-    message.success("提示词生成成功");
+    window.$message.success("提示词生成成功");
   } catch (e: any) {
-    message.error(e?.message || "生成失败");
+    window.$message.error(e?.message || "生成失败");
   } finally {
     promptLoading.value = false;
   }

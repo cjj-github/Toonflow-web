@@ -319,7 +319,7 @@ async function doMerge(): Promise<void> {
   generateLoading.value = true;
 
   if (mockStoryboard.value.editPrompt.length < 5) {
-    message.error("编辑指令必须大于5个字");
+    window.$message.error("编辑指令必须大于5个字");
     generateLoading.value = false;
     return;
   }
@@ -344,7 +344,7 @@ async function doMerge(): Promise<void> {
       filePath: res.data.url,
       id: res.data?.id ?? undefined,
     });
-    message.success("图片生成成功");
+    window.$message.success("图片生成成功");
   } catch {
     // 错误处理
   } finally {
@@ -361,7 +361,7 @@ function doFusionEdit(storyboard: Storyboard): void {
 
 function handleSaveFirstFrame(): void {
   if (resultSelectedIndex.value < 0 || !mockStoryboard.value.generateImg[resultSelectedIndex.value]) {
-    message.warning("请先选择一张图片");
+    window.$message.warning("请先选择一张图片");
     return;
   }
 

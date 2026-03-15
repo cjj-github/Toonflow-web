@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import axios from "@/utils/axios";
-import { message } from "ant-design-vue";
 import store from "@/stores";
 import addProject from "./components/addProject.vue";
 const { project } = storeToRefs(store());
@@ -83,7 +82,7 @@ function getProjects() {
       projects.value = data;
     })
     .catch(() => {
-      message.error("获取项目列表失败");
+      window.$message.error("获取项目列表失败");
     });
 }
 
@@ -94,7 +93,7 @@ onMounted(() => {
 function openProject(projectId: string | undefined) {
   const item = projects.value.find((p) => p.id === projectId);
   if (item) project.value = item;
-  else return message.error("未找到该项目!");
+  else return window.$message.error("未找到该项目!");
   router.push(`/projectDetail?id=${projectId}`);
 }
 const addProjectShow = ref(false);
@@ -105,11 +104,11 @@ function deleteProject(projectId: string | undefined) {
   axios
     .post("/project/delProject", { id: projectId })
     .then(() => {
-      message.success("项目删除成功");
+      window.$message.success("项目删除成功");
       getProjects();
     })
     .catch(() => {
-      message.error("项目删除失败");
+      window.$message.error("项目删除失败");
     });
 }
 </script>

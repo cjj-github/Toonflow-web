@@ -57,7 +57,6 @@
 import { ref } from "vue";
 import store from "@/stores";
 import axios from "@/utils/axios";
-import { message } from "ant-design-vue";
 import dayjs from "dayjs";
 import type { PrimaryTableCol } from "tdesign-vue-next";
 const { projectId } = storeToRefs(store());
@@ -133,7 +132,7 @@ function getTaskCategories() {
       taskCategories.value.unshift({ label: "全部", value: "" });
     })
     .catch(() => {
-      message.error("获取任务大类失败");
+      window.$message.error("获取任务大类失败");
     });
 }
 //获取任务列表
@@ -152,7 +151,7 @@ function getTaskList() {
       pageValue.value.total = data.total;
     })
     .catch(() => {
-      message.error("获取任务列表失败");
+      window.$message.error("获取任务列表失败");
     })
     .finally(() => {
       pageValue.value.loading = false;

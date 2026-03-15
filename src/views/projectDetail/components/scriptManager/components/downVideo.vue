@@ -208,14 +208,14 @@ async function downloadFile(url: string, filename: string) {
 
 async function handleDownload() {
   if (selectedKeys.value.length === 0) {
-    message.warning("请至少选择一个视频");
+    window.$message.warning("请至少选择一个视频");
     return;
   }
 
   const selectedVideos = videoData.value.filter((v) => selectedKeys.value.includes(v.id) && v.filePath);
 
   if (selectedVideos.length === 0) {
-    message.warning("选中的视频没有可下载的文件");
+    window.$message.warning("选中的视频没有可下载的文件");
     return;
   }
 
@@ -282,11 +282,11 @@ async function handleDownload() {
       document.body.removeChild(link);
     }, 100);
 
-    message.success({ content: "下载完成!", key: loadingKey });
+    window.$message.success({ content: "下载完成!", key: loadingKey });
     visible.value = false;
   } catch (error) {
     console.error("打包下载错误:", error);
-    message.error({ content: "打包失败,请重试", key: loadingKey });
+    window.$message.error({ content: "打包失败,请重试", key: loadingKey });
   }
 }
 

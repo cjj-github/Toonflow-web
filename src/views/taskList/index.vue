@@ -111,7 +111,7 @@ function getTaskCategories() {
       taskCategories.value.unshift({ label: "全部", value: "" });
     })
     .catch(() => {
-      message.error("获取任务大类失败");
+      window.$message.error("获取任务大类失败");
     });
 }
 //获取任务列表
@@ -129,7 +129,7 @@ function getTaskList() {
       pageValue.value.total = data.total;
     })
     .catch(() => {
-      message.error("获取任务列表失败");
+      window.$message.error("获取任务列表失败");
     });
 }
 </script>

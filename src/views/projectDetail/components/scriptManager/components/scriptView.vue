@@ -269,7 +269,7 @@ async function fetchScripts() {
     const { data } = await axios.post("/script/geScriptApi", { projectId: projectId.value });
     scripts.value = data;
   } catch {
-    message.error("获取剧本列表失败");
+    window.$message.error("获取剧本列表失败");
   }
 }
 
@@ -284,11 +284,11 @@ async function handleGenerate() {
 
   try {
     await axios.post("/script/generateScriptApi", { outlineId, scriptId: id });
-    message.success("生成剧本成功");
+    window.$message.success("生成剧本成功");
     isRefreshing.value = true;
     emit("getScriptData");
   } catch (err: any) {
-    message.error(err.message || "生成剧本失败");
+    window.$message.error(err.message || "生成剧本失败");
   } finally {
     generating.value = false;
     scriptGenerateLoading.value[id] = false;
@@ -306,9 +306,9 @@ async function saveScript() {
       scriptId: script.id,
       content: script.content,
     });
-    message.success("保存成功");
+    window.$message.success("保存成功");
   } catch {
-    message.error("保存失败");
+    window.$message.error("保存失败");
   }
 }
 
@@ -399,7 +399,7 @@ function exportScript() {
     };
   });
   if (!script || !script.length) {
-    message.warning("暂无剧本可导出");
+    window.$message.warning("暂无剧本可导出");
     return;
   }
   //生成txt文件

@@ -185,7 +185,7 @@ async function getStats() {
     statsData.value = res.data;
   } catch (err: unknown) {
     if (err instanceof Error) {
-      message.error("获取项目统计信息失败：" + err.message);
+      window.$message.error("获取项目统计信息失败：" + err.message);
     }
   }
 }
@@ -223,11 +223,11 @@ function updateProjectIntro() {
     })
     .then(async () => {
       await store().setProjectById(projectId.value);
-      message.success("项目简介更新成功");
+      window.$message.success("项目简介更新成功");
       introEdit.value = false;
     })
     .catch((e) => {
-      message.error("项目简介更新失败");
+      window.$message.error("项目简介更新失败");
     });
 }
 function updateProject() {
@@ -241,11 +241,11 @@ function updateProject() {
     })
     .then(async () => {
       await store().setProjectById(projectId.value);
-      message.success("全局设置更新成功");
+      window.$message.success("全局设置更新成功");
       globalSettingEdit.value = false;
     })
     .catch(() => {
-      message.error("全局设置更新失败");
+      window.$message.error("全局设置更新失败");
     });
 }
 const artStyleShow = ref<boolean>(false);
